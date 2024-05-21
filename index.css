@@ -1,0 +1,135 @@
+:root {
+  --main-bg-color: #f3f3f3;
+  --main-text-color: #333;
+  --main-accent-color: #008391;
+  --container-bg-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--container-bg-color);
+  padding: 1rem;
+  border-radius: 15px;
+  gap: 0.5rem;
+}
+
+.dark-mode {
+  --main-bg-color: #1b1b1d;
+  --main-text-color: #f3f3f3;
+  --main-accent-color: #dbbc30;
+  --container-bg-color: #242526;
+}
+
+.bottom-panel-row {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.code-editor-panel {
+  flex: 0 0 auto;
+  resize: vertical;
+  overflow: auto;
+  border-radius: 15px;
+}
+
+.go-code-panel,
+.render-panel {
+  resize: horizontal;
+  overflow: auto;
+}
+
+.top-tool-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+a.run-button {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border: solid 2px var(--main-accent-color);
+  border-radius: 50px;
+}
+
+a.run-button:before {
+  content: "";
+  width: 17px;
+  height: 26.5px;
+  border-left: 2px solid var(--main-accent-color);
+  border-radius: 2.5px;
+  position: absolute;
+  top: 11.5px;
+  left: 18.5px;
+}
+
+a.run-button:after {
+  content: "";
+  position: absolute;
+  top: 13.5px; 
+  left: 9.5px; 
+  width: 21px; 
+  height: 21px;
+  transform: rotate(45deg) skew(-5deg, -5deg);
+  border-top: 2px solid var(--main-accent-color);
+  border-right: 2px solid var(--main-accent-color);
+  border-radius: 2.5px;
+}
+
+a.run-button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.theme-toggle__lightbulb {
+  transition: stroke 0.3s ease, fill 0.3s ease;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--main-accent-color);
+  padding: 0.5rem 1rem;
+  border-radius: 15px 15px 0 0;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.run-button.loading {
+  border: 2px dotted var(--main-accent-color);
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+ 
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: var(--main-accent-color);
+  animation: spinner .6s linear infinite;
+}
