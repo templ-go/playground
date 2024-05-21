@@ -20,19 +20,11 @@ This project is a templ playground, using WebAssembly (WASM) application to conv
 1. Run the `xc build-wasm` command (If not installed see XC documentation [here](https://xcfile.dev/)).
 2. Run the `xc serve` command (If not installed see XC documentation [here](https://xcfile.dev/)).
 3. Navigate to `localhost:5757`
-3. Write your Templ code in the editor.
-4. Click the "Run" button to convert the Templ code into Go code.
-5. The HTML code will be displayed in the bottom left editor.
-6. The rendered result on the bottom left preview panel.
+4. Write your Templ code in the editor.
+5. Click the "Run" button to convert the Templ code into Go code.
+6. The HTML code will be displayed in the bottom left editor.
+7. The rendered result on the bottom left preview panel.
 
-## How to Build
-
-To build the WASM module, run the following command:
-
-```sh
-GOOS=js GOARCH=wasm go build -o main.wasm
-```
-This will create a main.wasm file that can be loaded by script.js.
 
 ## Dependencies
 Templ: A library for generating Go code from Templ templates.
