@@ -16,7 +16,7 @@ func main() {
 	}))
 
 	log.Println("Listening on :5757...")
-	err := http.ListenAndServe(":5757", nil)
+	err := http.ListenAndServe("127.0.0.1:5757", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
