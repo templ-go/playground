@@ -9,7 +9,7 @@ import (
 	"syscall/js"
 
 	"github.com/a-h/templ/generator"
-	v2 "github.com/a-h/templ/parser/v2"
+	"github.com/a-h/templ/parser/v2"
 )
 
 // ConvertTemplToGo is a function that can be called from JavaScript.
@@ -18,7 +18,7 @@ func ConvertTemplToGo(this js.Value, args []js.Value) interface{} {
 	goTemplCode := args[0].String()
 
 	// Parse the Templ code
-	templateFile, err := v2.ParseString(goTemplCode)
+	templateFile, err := parser.ParseString(goTemplCode)
 	if err != nil {
 		return fmt.Sprintf("Error parsing Templ code: %s\nTempl code was: %s", err.Error(), goTemplCode)
 	}

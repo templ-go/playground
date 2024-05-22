@@ -34,10 +34,10 @@ CodeMirror: A versatile text editor implemented in JavaScript for the browser.
 ### build-wasm
 Builds templ to go converter wasm module
 ```sh
-GOOS=js GOARCH=wasm go build -o main.wasm templ_to_go.go
+GOOS=js GOARCH=wasm go build -o main.wasm ./templtogo
 ```
 ### serve
 Runs a simple web server for local playground development
 ```sh
-go run server.go
+go run ./server
 ```
