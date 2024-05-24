@@ -10,8 +10,24 @@
   display: none;
 }
 
-
 body {
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Ubuntu,
+    Cantarell,
+    Noto Sans,
+    sans-serif,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
   background-color: var(--main-bg-color);
   color: var(--main-text-color);
   margin: 0;
@@ -103,7 +119,9 @@ button.run-button:hover {
 }
 
 .theme-toggle__lightbulb {
-  transition: stroke 0.3s ease, fill 0.3s ease;
+  transition:
+    stroke 0.3s ease,
+    fill 0.3s ease;
 }
 
 .panel-header {
@@ -212,3 +230,4 @@ button.run-button:hover {
 .bottom-panel-row.child__panel--hidden {
   grid-template-columns: 1fr;
 }
+
