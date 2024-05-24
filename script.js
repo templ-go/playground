@@ -4,40 +4,22 @@ let htmlCodeEditor;
 WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(
   (result) => {
     go.run(result.instance);
-    // Call the Go function with the string
-    // let goCode = window.ConvertTemplToGo(goTemplCode);
-    // console.log(goCode);
-
-    // fetch("https://play.golang.org/compile", {
-    //   method: "POST",
-    //   body: JSON.stringify({ version: 2, body: goCode }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("🚀 ~ .then ~ data:", data)
-    //     // Display the output
-    //     console.log("🚀 ~ .then ~ data.Events[0].Message:", data.Events[0].Message)
-    //     // document.getElementById("output").textContent = data.Events[0].Message;
-    //   });
   }
 );
 window.onload = function () {
-  editor = CodeMirror.fromTextArea(document.getElementById("templ-code"), {
-    lineNumbers: true,
-    mode: "go",
-    theme: "dracula",
-  });
+  editor = ace.edit("templ-code");
+  editor.setTheme("ace/theme/dracula");
+  editor.getSession().setMode("ace/mode/go");
+  editor.setShowPrintMargin(false);
 
-  htmlCodeEditor = CodeMirror.fromTextArea(document.getElementById("output"), {
-    lineNumbers: true,
-    mode: "htmlmixed",
-    theme: "dracula",
-    readonly: "nocursor",
-  });
+  htmlCodeEditor = ace.edit("output");
+  htmlCodeEditor.setTheme("ace/theme/dracula");
+  htmlCodeEditor.getSession().setMode("ace/mode/html");
+  htmlCodeEditor.setReadOnly(true);
+  htmlCodeEditor.setShowPrintMargin(false);
 };
 
 async function convertTemplToGo() {
-  // Get the Templ code from the textarea
   const runButton = document.getElementById("runButton");
 
   runButton.classList.toggle("loading");
@@ -53,13 +35,14 @@ async function convertTemplToGo() {
     .then((data) => {
       // console.log("🚀 ~ .then ~ data:", data)
       if (data.Errors) {
+        console.log("🚀 ~ .then ~ data.Errors:", data.Errors);
         document.getElementById("output").textContent = data.Errors;
         return;
       }
       // Display the output
       // console.log("🚀 ~ .then ~ data.Events[0].Message:", data.Events[0].Message)
       const formattedHTML = html_beautify(data.Events[0].Message);
-      console.log("🚀 ~ .then ~ formattedHTML:", formattedHTML)
+      console.log("🚀 ~ .then ~ formattedHTML:", formattedHTML);
       htmlCodeEditor.setValue(formattedHTML);
       document.getElementById("render").innerHTML = formattedHTML;
       runButton.classList.toggle("loading");
@@ -80,6 +63,16 @@ function toggleDarkMode() {
   lightbulb.style.stroke = isDarkMode ? "white" : "#dbbc30";
   lightbulb.style.fill = isDarkMode ? "white" : "#dbbc30";
 
-  editor.setOption("theme", isDarkMode ? "dracula" : "default");
-  htmlCodeEditor.setOption("theme", isDarkMode ? "dracula" : "default");
+  editor.setTheme(isDarkMode ? "ace/theme/dracula" : "ace/theme/textmate");
+  htmlCodeEditor.setTheme(
+    isDarkMode ? "ace/theme/dracula" : "ace/theme/textmate"
+  );
+}
+
+function toggleHTMLPanel() {
+  document
+    .getElementById("htmlToggle")
+    .classList.toggle("html-toggle--toggled");
+  document.getElementById("bottomPanelRow").classList.toggle("child__panel--hidden");
+  htmlOutput.classList.toggle("panel--hidden");
 }

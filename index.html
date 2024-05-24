@@ -17,7 +17,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"
     />
-    <link data-rh="true" rel="icon" href="/favicon.ico">
+    <link data-rh="true" rel="icon" href="/favicon.ico" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/go/go.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.js"></script>
@@ -25,57 +29,82 @@
     <script src="script.js"></script>
   </head>
   <body class="dark-mode">
+    <nav aria-label="Main" class="navbar">
+      <div class="navbar__inner">
+        <div class="navbar__items">
+          <a class="navbar__brand" href="https://templ.guide/"
+            ><div class="navbar__logo">
+              <img
+                src="/templ-logo.svg"
+                alt="Templ Logo"
+                class="navbar__logo__img"
+              /></div></a
+          ><a
+            aria-current="page"
+            class="navbar__item navbar__link"
+            href="https://templ.guide/"
+            >Docs</a
+          >
+        </div>
+        <div class="navbar__items--right">
+          <button
+            class="theme-toggle theme-toggle--toggled"
+            type="button"
+            title="Toggle theme"
+            aria-label="Toggle theme"
+            id="themeToggle"
+            onclick="toggleDarkMode()"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              width="40px"
+              height="40px"
+              class="theme-toggle__lightbulb"
+              stroke-width="0.7"
+              stroke="white"
+              fill="white"
+              stroke-linecap="round"
+              viewBox="0 0 40 40"
+            >
+              <path
+                stroke-width="0"
+                d="M9.4 9.9c1.8-1.8 4.1-2.7 6.6-2.7 5.1 0 9.3 4.2 9.3 9.3 0 2.3-.8 4.4-2.3 6.1-.7.8-2 2.8-2.5 4.4 0 .2-.2.4-.5.4-.2 0-.4-.2-.4-.5v-.1c.5-1.8 2-3.9 2.7-4.8 1.4-1.5 2.1-3.5 2.1-5.6 0-4.7-3.7-8.5-8.4-8.5-2.3 0-4.4.9-5.9 2.5-1.6 1.6-2.5 3.7-2.5 6 0 2.1.7 4 2.1 5.6.8.9 2.2 2.9 2.7 4.9 0 .2-.1.5-.4.5h-.1c-.2 0-.4-.1-.4-.4-.5-1.7-1.8-3.7-2.5-4.5-1.5-1.7-2.3-3.9-2.3-6.1 0-2.3 1-4.7 2.7-6.5z"
+              />
+              <path d="M19.8 28.3h-7.6" />
+              <path d="M19.8 29.5h-7.6" />
+              <path d="M19.8 30.7h-7.6" />
+              <path
+                pathLength="1"
+                class="theme-toggle__lightbulb__coil"
+                fill="none"
+                d="M14.6 27.1c0-3.4 0-6.8-.1-10.2-.2-1-1.1-1.7-2-1.7-1.2-.1-2.3 1-2.2 2.3.1 1 .9 1.9 2.1 2h7.2c1.1-.1 2-1 2.1-2 .1-1.2-1-2.3-2.2-2.3-.9 0-1.7.7-2 1.7 0 3.4 0 6.8-.1 10.2"
+              />
+              <g class="theme-toggle__lightbulb__rays">
+                <path pathLength="1" d="M16 6.4V1.3" />
+                <path pathLength="1" d="M26.3 15.8h5.1" />
+                <path pathLength="1" d="m22.6 9 3.7-3.6" />
+                <path pathLength="1" d="M9.4 9 5.7 5.4" />
+                <path pathLength="1" d="M5.7 15.8H.6" />
+              </g>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div role="presentation" class="navbar-sidebar__backdrop"></div>
+    </nav>
     <div class="container">
       <div class="top-tool-bar">
-        <a onclick="convertTemplToGo()" class="run-button" id="runButton"></a>
-        <button
-          class="theme-toggle theme-toggle--toggled"
-          type="button"
-          title="Toggle theme"
-          aria-label="Toggle theme"
-          id="themeToggle"
-          onclick="toggleDarkMode()"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            width="40px"
-            height="40px"
-            class="theme-toggle__lightbulb"
-            stroke-width="0.7"
-            stroke="white"
-            fill="white"
-            stroke-linecap="round"
-            viewBox="0 0 40 40"
-          >
-            <path
-              stroke-width="0"
-              d="M9.4 9.9c1.8-1.8 4.1-2.7 6.6-2.7 5.1 0 9.3 4.2 9.3 9.3 0 2.3-.8 4.4-2.3 6.1-.7.8-2 2.8-2.5 4.4 0 .2-.2.4-.5.4-.2 0-.4-.2-.4-.5v-.1c.5-1.8 2-3.9 2.7-4.8 1.4-1.5 2.1-3.5 2.1-5.6 0-4.7-3.7-8.5-8.4-8.5-2.3 0-4.4.9-5.9 2.5-1.6 1.6-2.5 3.7-2.5 6 0 2.1.7 4 2.1 5.6.8.9 2.2 2.9 2.7 4.9 0 .2-.1.5-.4.5h-.1c-.2 0-.4-.1-.4-.4-.5-1.7-1.8-3.7-2.5-4.5-1.5-1.7-2.3-3.9-2.3-6.1 0-2.3 1-4.7 2.7-6.5z"
-            />
-            <path d="M19.8 28.3h-7.6" />
-            <path d="M19.8 29.5h-7.6" />
-            <path d="M19.8 30.7h-7.6" />
-            <path
-              pathLength="1"
-              class="theme-toggle__lightbulb__coil"
-              fill="none"
-              d="M14.6 27.1c0-3.4 0-6.8-.1-10.2-.2-1-1.1-1.7-2-1.7-1.2-.1-2.3 1-2.2 2.3.1 1 .9 1.9 2.1 2h7.2c1.1-.1 2-1 2.1-2 .1-1.2-1-2.3-2.2-2.3-.9 0-1.7.7-2 1.7 0 3.4 0 6.8-.1 10.2"
-            />
-            <g class="theme-toggle__lightbulb__rays">
-              <path pathLength="1" d="M16 6.4V1.3" />
-              <path pathLength="1" d="M26.3 15.8h5.1" />
-              <path pathLength="1" d="m22.6 9 3.7-3.6" />
-              <path pathLength="1" d="M9.4 9 5.7 5.4" />
-              <path pathLength="1" d="M5.7 15.8H.6" />
-            </g>
-          </svg>
+        <button onclick="convertTemplToGo()" class="run-button" id="runButton">
+          Run
+        </button>
+        <button onclick="toggleHTMLPanel()" class="html-toggle" id="htmlToggle">
+          Show HTML
         </button>
       </div>
       <div class="code-editor-panel">
-        <div class="panel-header">
-          Templ code
-        </div>
-        <textarea id="templ-code" rows="10" cols="50">
+        <div class="panel-header">Templ code</div>
+        <textarea class="preload" id="templ-code" rows="10" cols="50">
 package main 
 import (
   "os"
@@ -93,21 +122,17 @@ func main() {
   component := greeting("John", "https://templ.guide/img/logo.svg")
   component.Render(context.Background(), os.Stdout)
 }
-        </textarea>
+          </textarea
+        >
       </div>
-      <div class="bottom-panel-row">
-        <div class="go-code-panel">
-          <div class="panel-header">
-            HTML
-          </div>
-          <textarea id="output"> </textarea>
+      <div class="bottom-panel-row child__panel--hidden" id="bottomPanelRow">
+        <div class="html-output-panel panel--hidden" id="htmlOutput">
+          <div class="panel-header">HTML</div>
+          <textarea id="output" class="preload"> </textarea>
         </div>
         <div class="render-panel">
-          <div class="panel-header">
-            Render
-          </div>
-          <div id="render">
-          </div>
+          <div class="panel-header">Render</div>
+          <div id="render"></div>
         </div>
       </div>
     </div>
