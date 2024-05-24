@@ -4,7 +4,7 @@ let htmlCodeEditor;
 WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(
   (result) => {
     go.run(result.instance);
-  }
+  },
 );
 window.onload = function () {
   editor = ace.edit("templ-code");
@@ -18,7 +18,15 @@ window.onload = function () {
   htmlCodeEditor.setReadOnly(true);
   htmlCodeEditor.setShowPrintMargin(false);
 };
+async function formatTempl() {
+  const formatButton = document.getElementById("formatButton");
 
+  formatButton.classList.toggle("loading");
+  let templCode = editor.getValue().trim();
+
+  templCode = window.FormatTempl(templCode);
+  editor.setValue(templCode);
+}
 async function convertTemplToGo() {
   const runButton = document.getElementById("runButton");
 
@@ -65,7 +73,7 @@ function toggleDarkMode() {
 
   editor.setTheme(isDarkMode ? "ace/theme/dracula" : "ace/theme/textmate");
   htmlCodeEditor.setTheme(
-    isDarkMode ? "ace/theme/dracula" : "ace/theme/textmate"
+    isDarkMode ? "ace/theme/dracula" : "ace/theme/textmate",
   );
 }
 
@@ -73,6 +81,8 @@ function toggleHTMLPanel() {
   document
     .getElementById("htmlToggle")
     .classList.toggle("html-toggle--toggled");
-  document.getElementById("bottomPanelRow").classList.toggle("child__panel--hidden");
+  document
+    .getElementById("bottomPanelRow")
+    .classList.toggle("child__panel--hidden");
   htmlOutput.classList.toggle("panel--hidden");
 }

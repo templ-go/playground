@@ -13,7 +13,7 @@ import (
 )
 
 // ConvertTemplToGo is a function that can be called from JavaScript.
-func ConvertTemplToGo(this js.Value, args []js.Value) interface{} {
+func ConvertTemplToGo(_ js.Value, args []js.Value) interface{} {
 	// Get the Templ code from the JavaScript arguments
 	goTemplCode := args[0].String()
 
@@ -34,9 +34,24 @@ func ConvertTemplToGo(this js.Value, args []js.Value) interface{} {
 	return buf.String()
 }
 
+func FormatTempl(this js.Value, args []js.Value) interface{} {
+	in := args[0].String()
+
+	// Parse the Templ code
+	templateFile, err := parser.ParseString(in)
+	if err != nil {
+		return fmt.Sprintf("Error parsing Templ code: %s\nTempl code was: %s", err.Error(), in)
+	}
+
+	var buf bytes.Buffer
+	templateFile.Write(&buf)
+	return buf.String()
+}
+
 func main() {
 	// Expose the function to JavaScript
 	js.Global().Set("ConvertTemplToGo", js.FuncOf(ConvertTemplToGo))
+	js.Global().Set("FormatTempl", js.FuncOf(FormatTempl))
 
 	// Prevent the Go program from exiting
 	select {}

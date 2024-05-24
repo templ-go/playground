@@ -95,9 +95,18 @@
     </nav>
     <div class="container">
       <div class="top-tool-bar">
-        <button onclick="convertTemplToGo()" class="run-button" id="runButton">
-          Run
-        </button>
+        <div>
+          <button
+            onclick="convertTemplToGo()"
+            class="run-button"
+            id="runButton"
+          >
+            Run
+          </button>
+          <button onclick="formatTempl()" class="run-button" id="formatButton">
+            Format
+          </button>
+        </div>
         <button onclick="toggleHTMLPanel()" class="html-toggle" id="htmlToggle">
           Show HTML
         </button>
