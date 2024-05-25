@@ -2,6 +2,7 @@
   --main-bg-color: #f3f3f3;
   --main-text-color: #333;
   --main-accent-color: #008391;
+  --button-text-color: #f3f3f3;
   --container-bg-color: rgba(0, 0, 0, 0.1);
   --navbar-bg-color: #fff;
 }
@@ -52,6 +53,7 @@ body {
   --main-bg-color: #1b1b1d;
   --main-text-color: #f3f3f3;
   --main-accent-color: #dbbc30;
+  --button-text-color: #1b1b1b;
   --container-bg-color: #242526;
   --ifm-navbar-link-hover-color: #dbbc30;
   --navbar-bg-color: #242526;
@@ -74,7 +76,7 @@ body {
 .render-panel {
   overflow: auto;
   resize: horizontal;
-  flex: 2 2 auto;
+  flex-grow: 2;
 }
 
 .top-tool-bar {
@@ -86,7 +88,7 @@ body {
 button.run-button {
   background-color: var(--main-accent-color);
   border-radius: 15px;
-  color: var(--main-text-color);
+  color: var(--button-text-color);
   border: none;
   padding: 0.312rem 0.75rem;
   transition: background-color 0.3s ease;
@@ -109,13 +111,13 @@ button.run-button:hover {
   cursor: pointer;
 
   background-color: var(--main-accent-color);
-  color: var(--main-text-color);
+  color: var(--button-text-color);
   border-color: var(--main-accent-color);
 }
 
 .html-toggle--toggled {
   background-color: var(--main-accent-color);
-  color: var(--main-text-color);
+  color: var(--button-text-color);
   border-color: var(--main-accent-color);
 }
 
