@@ -59,8 +59,7 @@ body {
 
 .bottom-panel-row {
   flex: 1 1 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 10px;
 }
 
@@ -74,6 +73,8 @@ body {
 .html-output-panel,
 .render-panel {
   overflow: auto;
+  resize: horizontal;
+  flex: 2 2 auto;
 }
 
 .top-tool-bar {
