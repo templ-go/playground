@@ -65,10 +65,10 @@ body {
 }
 
 .code-editor-panel {
+  resize: vertical;
   flex: 1 0 auto;
   overflow: auto;
   border-radius: 15px;
-  height: 0;
 }
 
 .html-output-panel,
@@ -230,4 +230,3 @@ button.run-button:hover {
 .bottom-panel-row.child__panel--hidden {
   grid-template-columns: 1fr;
 }
-
