@@ -5,7 +5,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -23,7 +22,6 @@ func ConvertTemplToGo(_ js.Value, args []js.Value) interface{} {
 	// Parse the Templ code
 	templateFile, err := parser.ParseString(goTemplCode)
 	if err != nil {
-		fmt.Println("parser convert errored ")
 		return js.ValueOf(map[string]any{
 			"error": err.Error(),
 			"code":  goTemplCode,
