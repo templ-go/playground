@@ -30,7 +30,7 @@ async function formatTempl() {
     editor.getSession().setAnnotations([{
       row: templFormattedCode.line,
       column: 0,
-      text: templFormattedCode.error, // Or the Json reply from the parser 
+      text: templFormattedCode.error,
       type: "error" // also "warning" and "info"
     }])
     return;
@@ -50,7 +50,7 @@ async function convertTemplToGo() {
     editor.getSession().setAnnotations([{
       row: goCode.line,
       column: 0,
-      text: goCode.error, // Or the Json reply from the parser 
+      text: goCode.error,
       type: "error" // also "warning" and "info"
     }])
     return;
