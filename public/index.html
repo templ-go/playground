@@ -117,20 +117,20 @@
 package main 
 
 import (
-  "os"
+	"os"
 )
 
 templ greeting(name string, imgURL string) {
-  <div style="background-color: lightblue; padding: 20px;">
-    <h1>Hello, { name }</h1>
-    <img src={ imgURL } alt="Welcome image" style="width: 200px; height: auto;" />
-    <p>Welcome to our site. We're glad to have you here!</p>
-  </div>
+	<div style="background-color: lightblue; padding: 20px;">
+		<h1>Hello, { name }</h1>
+		<img src={ imgURL } alt="Welcome image" style="width: 200px; height: auto;"/>
+		<p>Welcome to our site. We're glad to have you here!</p>
+	</div>
 }
 
 func main() {
-  component := greeting("John", "https://templ.guide/img/logo.svg")
-  component.Render(context.Background(), os.Stdout)
+	component := greeting("John", "https://templ.guide/img/logo.svg")
+	component.Render(context.Background(), os.Stdout)
 }
           </textarea
         >
