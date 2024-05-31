@@ -25,10 +25,10 @@ func ConvertTemplToGo(_ js.Value, args []js.Value) interface{} {
 	if err != nil {
 		fmt.Println("parser convert errored ")
 		return js.ValueOf(map[string]any{
-        "error": err.Error(),
-		"code": goTemplCode,
-		"line": lineError(err.Error()),
-    })
+			"error": err.Error(),
+			"code":  goTemplCode,
+			"line":  lineError(err.Error()),
+		})
 	}
 
 	// Generate the Go code
@@ -36,23 +36,23 @@ func ConvertTemplToGo(_ js.Value, args []js.Value) interface{} {
 	_, _, err = generator.Generate(templateFile, &buf)
 	if err != nil {
 		return js.ValueOf(map[string]any{
-        "error": err.Error(),
-    }) 	
-  }
+			"error": err.Error(),
+		})
+	}
 
 	// Return the Go code as a string
 	return js.ValueOf(map[string]any{
-      "result": buf.String(),
-  })
+		"result": buf.String(),
+	})
 }
 
 func lineError(errorLine string) int {
 	re := regexp.MustCompile("line ([\\d]+)")
-		line := re.FindString(errorLine)
-		splitLine := strings.Split(line, " ")
-		lineNumber, _ := strconv.Atoi(splitLine[1])
+	line := re.FindString(errorLine)
+	splitLine := strings.Split(line, " ")
+	lineNumber, _ := strconv.Atoi(splitLine[1])
 
-		return lineNumber
+	return lineNumber
 }
 
 func FormatTempl(this js.Value, args []js.Value) interface{} {
@@ -63,16 +63,16 @@ func FormatTempl(this js.Value, args []js.Value) interface{} {
 	if err != nil {
 		return js.ValueOf(map[string]any{
 			"error": err.Error(),
-			"code": in,
-			"line": lineError(err.Error()),
+			"code":  in,
+			"line":  lineError(err.Error()),
 		})
 	}
 
 	var buf bytes.Buffer
 	templateFile.Write(&buf)
 	return js.ValueOf(map[string]any{
-      "result": buf.String(),
-    })
+		"result": buf.String(),
+	})
 }
 
 func main() {
