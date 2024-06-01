@@ -25,7 +25,7 @@ async function formatTempl() {
   let templCode = editor.getValue().trim();
 
   let templFormattedCode = window.FormatTempl(templCode);
-  if (templFormattedCode.error != undefined) {
+  if (templFormattedCode.error) {
     editor.setValue(templFormattedCode.code)
     editor.getSession().setAnnotations([{
       row: templFormattedCode.line,
@@ -45,7 +45,7 @@ async function convertTemplToGo() {
 
   let goCode = window.ConvertTemplToGo(templCode);
   
-  if (goCode.error != undefined) {
+  if (goCode.error) {
     editor.setValue(goCode.code)
     editor.getSession().setAnnotations([{
       row: goCode.line,
@@ -62,16 +62,12 @@ async function convertTemplToGo() {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("🚀 ~ .then ~ data:", data)
       if (data.Errors) {
-        console.log("🚀 ~ .then promise get output ~ data.Errors:", data.Errors);
         document.getElementById("output").textContent = data.Errors;
         return;
       }
       // Display the output
-      // console.log("🚀 ~ .then ~ data.Events[0].Message:", data.Events[0].Message)
       const formattedHTML = html_beautify(data.Events[0].Message);
-      console.log("🚀 ~ .then ~ formattedHTML:", formattedHTML);
       htmlCodeEditor.setValue(formattedHTML);
       document.getElementById("render").innerHTML = formattedHTML;
       runButton.classList.toggle("loading");
@@ -80,7 +76,6 @@ async function convertTemplToGo() {
   // Display the output in the div with id 'output'
   // document.getElementById("output").textContent = goCode;
 
-  // console.log("🚀 ~ goCode ~ goCode:", goCode)
 }
 
 function toggleDarkMode() {
