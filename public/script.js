@@ -24,8 +24,18 @@ async function formatTempl() {
   formatButton.classList.toggle("loading");
   let templCode = editor.getValue().trim();
 
-  templCode = window.FormatTempl(templCode);
-  editor.setValue(templCode);
+  let templFormattedCode = window.FormatTempl(templCode);
+  if (templFormattedCode.error) {
+    editor.setValue(templFormattedCode.code)
+    editor.getSession().setAnnotations([{
+      row: templFormattedCode.line,
+      column: 0,
+      text: templFormattedCode.error,
+      type: "error" // also "warning" and "info"
+    }])
+    return;
+  }
+  editor.setValue(templFormattedCode.result);
 }
 async function convertTemplToGo() {
   const runButton = document.getElementById("runButton");
@@ -34,23 +44,30 @@ async function convertTemplToGo() {
   let templCode = editor.getValue().trim();
 
   let goCode = window.ConvertTemplToGo(templCode);
-
+  
+  if (goCode.error) {
+    editor.setValue(goCode.code)
+    editor.getSession().setAnnotations([{
+      row: goCode.line,
+      column: 0,
+      text: goCode.error,
+      type: "error" // also "warning" and "info"
+    }])
+    return;
+  }
+  editor.setValue(templCode)
   fetch("https://play.golang.org/compile", {
     method: "POST",
-    body: JSON.stringify({ version: 2, body: goCode }),
+    body: JSON.stringify({ version: 2, body: goCode.result }),
   })
     .then((response) => response.json())
     .then((data) => {
-      // console.log("🚀 ~ .then ~ data:", data)
       if (data.Errors) {
-        console.log("🚀 ~ .then ~ data.Errors:", data.Errors);
         document.getElementById("output").textContent = data.Errors;
         return;
       }
       // Display the output
-      // console.log("🚀 ~ .then ~ data.Events[0].Message:", data.Events[0].Message)
       const formattedHTML = html_beautify(data.Events[0].Message);
-      console.log("🚀 ~ .then ~ formattedHTML:", formattedHTML);
       htmlCodeEditor.setValue(formattedHTML);
       document.getElementById("render").innerHTML = formattedHTML;
       runButton.classList.toggle("loading");
@@ -59,7 +76,6 @@ async function convertTemplToGo() {
   // Display the output in the div with id 'output'
   // document.getElementById("output").textContent = goCode;
 
-  // console.log("🚀 ~ goCode ~ goCode:", goCode)
 }
 
 function toggleDarkMode() {

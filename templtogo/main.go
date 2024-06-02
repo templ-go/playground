@@ -5,7 +5,9 @@ package main
 
 import (
 	"bytes"
-	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
 	"syscall/js"
 
 	"github.com/a-h/templ/generator"
@@ -20,18 +22,35 @@ func ConvertTemplToGo(_ js.Value, args []js.Value) interface{} {
 	// Parse the Templ code
 	templateFile, err := parser.ParseString(goTemplCode)
 	if err != nil {
-		return fmt.Sprintf("Error parsing Templ code: %s\nTempl code was: %s", err.Error(), goTemplCode)
+		return js.ValueOf(map[string]any{
+			"error": err.Error(),
+			"code":  goTemplCode,
+			"line":  lineError(err.Error()),
+		})
 	}
 
 	// Generate the Go code
 	var buf bytes.Buffer
 	_, _, err = generator.Generate(templateFile, &buf)
 	if err != nil {
-		return fmt.Sprintf("Error generating Go code: %s", err.Error())
+		return js.ValueOf(map[string]any{
+			"error": err.Error(),
+		})
 	}
 
 	// Return the Go code as a string
-	return buf.String()
+	return js.ValueOf(map[string]any{
+		"result": buf.String(),
+	})
+}
+
+func lineError(errorLine string) int {
+	re := regexp.MustCompile("line ([\\d]+)")
+	line := re.FindString(errorLine)
+	splitLine := strings.Split(line, " ")
+	lineNumber, _ := strconv.Atoi(splitLine[1])
+
+	return lineNumber
 }
 
 func FormatTempl(this js.Value, args []js.Value) interface{} {
@@ -40,12 +59,18 @@ func FormatTempl(this js.Value, args []js.Value) interface{} {
 	// Parse the Templ code
 	templateFile, err := parser.ParseString(in)
 	if err != nil {
-		return fmt.Sprintf("Error parsing Templ code: %s\nTempl code was: %s", err.Error(), in)
+		return js.ValueOf(map[string]any{
+			"error": err.Error(),
+			"code":  in,
+			"line":  lineError(err.Error()),
+		})
 	}
 
 	var buf bytes.Buffer
 	templateFile.Write(&buf)
-	return buf.String()
+	return js.ValueOf(map[string]any{
+		"result": buf.String(),
+	})
 }
 
 func main() {
