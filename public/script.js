@@ -115,11 +115,13 @@ function toggleDarkMode() {
 }
 
 function toggleHTMLPanel() {
+  let currentHtmlCode = htmlCodeEditor.session.getValue()
+  htmlCodeEditor.session.setValue(currentHtmlCode)
+
   document
     .getElementById("htmlToggle")
     .classList.toggle("html-toggle--toggled");
-  let currentHtmlCode = htmlCodeEditor.session.getValue()
-  htmlCodeEditor.session.setValue(currentHtmlCode)
+  
   document
     .getElementById("bottomPanelRow")
     .classList.toggle("child__panel--hidden");
