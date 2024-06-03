@@ -18,7 +18,7 @@ window.onload = function () {
   htmlCodeEditor.getSession().setMode("ace/mode/html");
   htmlCodeEditor.setReadOnly(true);
   htmlCodeEditor.setShowPrintMargin(false);
-};
+};  
 async function formatTempl() {
   editor.getSession().setAnnotations();
   const formatButton = document.getElementById("formatButton");
@@ -119,6 +119,8 @@ function toggleHTMLPanel() {
   document
     .getElementById("htmlToggle")
     .classList.toggle("html-toggle--toggled");
+  let currentHtmlCode = htmlCodeEditor.session.getValue()
+  htmlCodeEditor.session.setValue(currentHtmlCode)
   document
     .getElementById("bottomPanelRow")
     .classList.toggle("child__panel--hidden");
