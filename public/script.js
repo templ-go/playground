@@ -11,6 +11,7 @@ window.onload = function () {
   editor.setTheme("ace/theme/dracula");
   editor.getSession().setMode("ace/mode/go");
   editor.setShowPrintMargin(false);
+  editor.on("change", compileGo);
 
   htmlCodeEditor = ace.edit("output");
   htmlCodeEditor.setTheme("ace/theme/dracula");
@@ -19,6 +20,7 @@ window.onload = function () {
   htmlCodeEditor.setShowPrintMargin(false);
 };
 async function formatTempl() {
+  editor.getSession().setAnnotations();
   const formatButton = document.getElementById("formatButton");
 
   formatButton.classList.toggle("loading");
@@ -26,36 +28,42 @@ async function formatTempl() {
 
   let templFormattedCode = window.FormatTempl(templCode);
   if (templFormattedCode.error) {
-    editor.setValue(templFormattedCode.code)
-    editor.getSession().setAnnotations([{
-      row: templFormattedCode.line,
-      column: 0,
-      text: templFormattedCode.error,
-      type: "error" // also "warning" and "info"
-    }])
+    editor.setValue(templFormattedCode.code);
+    editor.getSession().setAnnotations([
+      {
+        row: templFormattedCode.line,
+        column: 0,
+        text: templFormattedCode.error,
+        type: "error", // also "warning" and "info"
+      },
+    ]);
     return;
   }
   editor.setValue(templFormattedCode.result);
 }
-async function convertTemplToGo() {
-  const runButton = document.getElementById("runButton");
-
-  runButton.classList.toggle("loading");
+async function compileGo() {
+  editor.getSession().setAnnotations();
   let templCode = editor.getValue().trim();
 
   let goCode = window.ConvertTemplToGo(templCode);
-  
+
   if (goCode.error) {
-    editor.setValue(goCode.code)
-    editor.getSession().setAnnotations([{
-      row: goCode.line,
-      column: 0,
-      text: goCode.error,
-      type: "error" // also "warning" and "info"
-    }])
+    editor.getSession().setAnnotations([
+      {
+        row: goCode.line,
+        column: 0,
+        text: goCode.error,
+        type: "error", // also "warning" and "info"
+      },
+    ]);
     return;
   }
-  editor.setValue(templCode)
+  return goCode;
+}
+async function compileAndRunCode() {
+  const runButton = document.getElementById("runButton");
+  runButton.classList.toggle("loading");
+  const goCode = compileGo();
   fetch("https://play.golang.org/compile", {
     method: "POST",
     body: JSON.stringify({ version: 2, body: goCode.result }),
@@ -75,7 +83,6 @@ async function convertTemplToGo() {
 
   // Display the output in the div with id 'output'
   // document.getElementById("output").textContent = goCode;
-
 }
 
 function toggleDarkMode() {

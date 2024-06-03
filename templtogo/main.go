@@ -47,8 +47,11 @@ func ConvertTemplToGo(_ js.Value, args []js.Value) interface{} {
 func lineError(errorLine string) int {
 	re := regexp.MustCompile("line ([\\d]+)")
 	line := re.FindString(errorLine)
-	splitLine := strings.Split(line, " ")
-	lineNumber, _ := strconv.Atoi(splitLine[1])
+	_, num, ok := strings.Cut(line, " ")
+	if !ok {
+		return -1
+	}
+	lineNumber, _ := strconv.Atoi(num)
 
 	return lineNumber
 }
