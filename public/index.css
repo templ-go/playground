@@ -5,6 +5,7 @@
   --button-text-color: #f3f3f3;
   --container-bg-color: rgba(0, 0, 0, 0.1);
   --navbar-bg-color: #fff;
+  --error-color: #fa383e;
 }
 
 .preload {
@@ -128,6 +129,11 @@ button.loading::after {
   to {
     transform: rotate(1turn);
   }
+}
+
+.error {
+  color: var(--error-color);
+  padding: 0.5rem 1rem;
 }
 
 .html-toggle {

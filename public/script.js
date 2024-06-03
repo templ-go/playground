@@ -24,24 +24,28 @@ async function formatTempl() {
   const formatButton = document.getElementById("formatButton");
 
   formatButton.classList.toggle("loading");
-  let templCode = editor.getValue().trim();
+  try {
+    let templCode = editor.getValue().trim();
 
-  let templFormattedCode = window.FormatTempl(templCode);
-  if (templFormattedCode.error) {
-    editor.setValue(templFormattedCode.code);
-    editor.getSession().setAnnotations([
-      {
-        row: templFormattedCode.line,
-        column: 0,
-        text: templFormattedCode.error,
-        type: "error", // also "warning" and "info"
-      },
-    ]);
+    let templFormattedCode = window.FormatTempl(templCode);
+    if (templFormattedCode.error) {
+      editor.setValue(templFormattedCode.code);
+      editor.getSession().setAnnotations([
+        {
+          row: templFormattedCode.line,
+          column: 0,
+          text: templFormattedCode.error,
+          type: "error", // also "warning" and "info"
+        },
+      ]);
+      return;
+    }
+    editor.setValue(templFormattedCode.result);
+  } catch (e) {
+    setError(e);
+  } finally {
     formatButton.classList.toggle("loading");
-    return;
   }
-  formatButton.classList.toggle("loading");
-  editor.setValue(templFormattedCode.result);
 }
 function compileGo() {
   editor.getSession().setAnnotations();
@@ -62,35 +66,38 @@ function compileGo() {
   }
   return goCode;
 }
+function setError(err) {
+  document.getElementById("render").innerHTML = `
+	<p class="error">${err}</p>
+	`;
+}
 async function compileAndRunCode() {
   const runButton = document.getElementById("runButton");
   runButton.classList.toggle("loading");
-  const goCode = compileGo();
-  if (!goCode) {
-    runButton.classList.toggle("loading");
-    return;
-  }
-  fetch("https://play.golang.org/compile", {
-    method: "POST",
-    body: JSON.stringify({ version: 2, body: goCode.result }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.Errors) {
-        htmlCodeEditor.setValue(data.Errors);
-        runButton.classList.toggle("loading");
-        return;
-      }
-      // Display the output
-      const formattedHTML = html_beautify(data.Events[0].Message);
-      htmlCodeEditor.setValue(formattedHTML);
-      document.getElementById("render").innerHTML = formattedHTML;
-      htmlCodeEditor.VirtualRenderer().updateText();
-      runButton.classList.toggle("loading");
+  try {
+    const goCode = compileGo();
+    if (!goCode) {
+      return;
+    }
+    const resp = await fetch("https://play.golang.org/compile", {
+      method: "POST",
+      body: JSON.stringify({ version: 2, body: goCode.result }),
     });
-
-  // Display the output in the div with id 'output'
-  // document.getElementById("output").textContent = goCode;
+    const data = await resp.json();
+    if (data.Errors) {
+      htmlCodeEditor.setValue(data.Errors);
+      return;
+    }
+    // Display the output
+    const formattedHTML = html_beautify(data.Events[0].Message);
+    htmlCodeEditor.setValue(formattedHTML);
+    document.getElementById("render").innerHTML = formattedHTML;
+    htmlCodeEditor.VirtualRenderer().updateText();
+  } catch (e) {
+    setError(e);
+  } finally {
+    runButton.classList.toggle("loading");
+  }
 }
 
 function toggleDarkMode() {
