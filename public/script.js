@@ -41,7 +41,7 @@ async function formatTempl() {
   }
   editor.setValue(templFormattedCode.result);
 }
-async function compileGo() {
+function compileGo() {
   editor.getSession().setAnnotations();
   let templCode = editor.getValue().trim();
 
@@ -71,7 +71,7 @@ async function compileAndRunCode() {
     .then((response) => response.json())
     .then((data) => {
       if (data.Errors) {
-        document.getElementById("output").textContent = data.Errors;
+        htmlCodeEditor.setValue(data.Errors);
         return;
       }
       // Display the output
