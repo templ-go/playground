@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Templ Playground</title>
+    <title>templ Playground</title>
     <link rel="stylesheet" href="index.css" />
     <link
       rel="stylesheet"
@@ -36,7 +36,7 @@
             ><div class="navbar__logo">
               <img
                 src="templ-logo.svg"
-                alt="Templ Logo"
+                alt="templ Logo"
                 class="navbar__logo__img"
               /></div></a
           ><a
@@ -107,12 +107,16 @@
             Format
           </button>
         </div>
-        <button onclick="toggleHTMLPanel()" class="html-toggle" id="htmlToggle">
+        <button
+          onclick="toggleHTMLPanel()"
+          class="html-toggle theme-toggle--toggled"
+          id="htmlToggle"
+        >
           Show HTML
         </button>
       </div>
       <div class="code-editor-panel">
-        <div class="panel-header">Templ</div>
+        <div class="panel-header">templ</div>
         <textarea class="preload" id="templ-code" rows="10" cols="50">
 package main 
 
@@ -135,14 +139,30 @@ func main() {
           </textarea
         >
       </div>
-      <div class="bottom-panel-row child__panel--hidden" id="bottomPanelRow">
-        <div class="html-output-panel panel--hidden" id="htmlOutput">
-          <div class="panel-header">HTML</div>
-          <textarea id="output" class="preload"> </textarea>
+      <div class="bottom-panel-row" id="bottomPanelRow">
+        <div class="html-output-panel" id="htmlOutput">
+          <div class="panel-header">Output (Source HTML)</div>
+          <textarea id="output" class="preload">
+<div style="background-color: lightblue; padding: 20px;">
+    <h1>Hello, John</h1><img src="https://templ.guide/img/logo.svg" alt="Welcome image" style="width: 200px; height: auto;">
+    <p>Welcome to our site. We're glad to have you here!</p>
+</div>
+	  </textarea
+          >
         </div>
         <div class="render-panel">
-          <div class="panel-header">Render</div>
-          <div id="render"></div>
+          <div class="panel-header">Output (Browser)</div>
+          <div id="render">
+            <div style="background-color: lightblue; padding: 20px">
+              <h1>Hello, John</h1>
+              <img
+                src="https://templ.guide/img/logo.svg"
+                alt="Welcome image"
+                style="width: 200px; height: auto"
+              />
+              <p>Welcome to our site. We're glad to have you here!</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
