@@ -37,8 +37,10 @@ async function formatTempl() {
         type: "error", // also "warning" and "info"
       },
     ]);
+    formatButton.classList.toggle("loading");
     return;
   }
+  formatButton.classList.toggle("loading");
   editor.setValue(templFormattedCode.result);
 }
 function compileGo() {
@@ -64,6 +66,10 @@ async function compileAndRunCode() {
   const runButton = document.getElementById("runButton");
   runButton.classList.toggle("loading");
   const goCode = compileGo();
+  if (!goCode) {
+    runButton.classList.toggle("loading");
+    return;
+  }
   fetch("https://play.golang.org/compile", {
     method: "POST",
     body: JSON.stringify({ version: 2, body: goCode.result }),
@@ -72,6 +78,7 @@ async function compileAndRunCode() {
     .then((data) => {
       if (data.Errors) {
         htmlCodeEditor.setValue(data.Errors);
+        runButton.classList.toggle("loading");
         return;
       }
       // Display the output
