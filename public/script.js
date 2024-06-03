@@ -92,7 +92,6 @@ async function compileAndRunCode() {
     const formattedHTML = html_beautify(data.Events[0].Message);
     htmlCodeEditor.setValue(formattedHTML);
     document.getElementById("render").innerHTML = formattedHTML;
-    htmlCodeEditor.VirtualRenderer().updateText();
   } catch (e) {
     setError(e);
   } finally {
