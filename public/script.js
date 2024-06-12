@@ -18,7 +18,7 @@ window.onload = function () {
   htmlCodeEditor.getSession().setMode("ace/mode/html");
   htmlCodeEditor.setReadOnly(true);
   htmlCodeEditor.setShowPrintMargin(false);
-};
+};  
 async function formatTempl() {
   editor.getSession().setAnnotations();
   const formatButton = document.getElementById("formatButton");
@@ -92,7 +92,6 @@ async function compileAndRunCode() {
     const formattedHTML = html_beautify(data.Events[0].Message);
     htmlCodeEditor.setValue(formattedHTML);
     document.getElementById("render").innerHTML = formattedHTML;
-    htmlCodeEditor.VirtualRenderer().updateText();
   } catch (e) {
     setError(e);
   } finally {
@@ -116,9 +115,13 @@ function toggleDarkMode() {
 }
 
 function toggleHTMLPanel() {
+  let currentHtmlCode = htmlCodeEditor.session.getValue()
+  htmlCodeEditor.session.setValue(currentHtmlCode)
+
   document
     .getElementById("htmlToggle")
     .classList.toggle("html-toggle--toggled");
+  
   document
     .getElementById("bottomPanelRow")
     .classList.toggle("child__panel--hidden");
