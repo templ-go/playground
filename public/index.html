@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -95,7 +95,7 @@
     </nav>
     <div class="container">
       <div class="top-tool-bar">
-        <div>
+        <div class="top-tool-bar__left">
           <button
             onclick="compileAndRunCode()"
             class="run-button"
@@ -107,13 +107,22 @@
             <span class="button-text"> Format </span>
           </button>
         </div>
-        <button
-          onclick="toggleHTMLPanel()"
-          class="html-toggle theme-toggle--toggled"
-          id="htmlToggle"
-        >
-          Show HTML
-        </button>
+        <div class="top-tool-bar__right">
+          <div class="checkbox__container">
+            <label class="checkbox">
+              <input type="checkbox" id="hotReloadToggle" />
+              <div class="checkbox__checkmark"></div>
+              <div class="checkbox__body">Hot Reload</div>
+            </label>
+          </div>
+          <button
+            onclick="toggleHTMLPanel()"
+            class="html-toggle theme-toggle--toggled"
+            id="htmlToggle"
+          >
+            Show HTML
+          </button>
+        </div>
       </div>
       <div class="code-editor-panel">
         <div class="panel-header">templ</div>

@@ -1,24 +1,47 @@
 let go = new Go();
 let editor;
 let htmlCodeEditor;
-WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(
-  (result) => {
-    go.run(result.instance);
-  },
-);
+
+WebAssembly.instantiateStreaming(
+  fetch("/assembly/main.wasm"),
+  go.importObject
+).then((result) => {
+  go.run(result.instance);
+});
 window.onload = function () {
+  let timeoutId = null;
+  const delay = 500;
+
   editor = ace.edit("templ-code");
   editor.setTheme("ace/theme/dracula");
   editor.getSession().setMode("ace/mode/go");
   editor.setShowPrintMargin(false);
-  editor.on("change", compileGo);
+  editor.on("change", function () {
+    console.log("Code Changed");
+    const hotReloadChecked = document.getElementById("hotReloadToggle").checked
+    console.log(hotReloadChecked)
+    if (hotReloadChecked) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(compileAndRunCode, delay);
+    }
+  });
 
   htmlCodeEditor = ace.edit("output");
   htmlCodeEditor.setTheme("ace/theme/dracula");
   htmlCodeEditor.getSession().setMode("ace/mode/html");
   htmlCodeEditor.setReadOnly(true);
   htmlCodeEditor.setShowPrintMargin(false);
-};  
+  var source = new EventSource("/events");
+  source.onmessage = function (e) {
+    if (e.data === "refresh") {
+      console.log("%cPage Hot Reloaded", "font-weight: bold; color: cyan;");
+      location.reload();
+    }
+  };
+};
 async function formatTempl() {
   editor.getSession().setAnnotations();
   const formatButton = document.getElementById("formatButton");
@@ -110,18 +133,18 @@ function toggleDarkMode() {
 
   editor.setTheme(isDarkMode ? "ace/theme/dracula" : "ace/theme/textmate");
   htmlCodeEditor.setTheme(
-    isDarkMode ? "ace/theme/dracula" : "ace/theme/textmate",
+    isDarkMode ? "ace/theme/dracula" : "ace/theme/textmate"
   );
 }
 
 function toggleHTMLPanel() {
-  let currentHtmlCode = htmlCodeEditor.session.getValue()
-  htmlCodeEditor.session.setValue(currentHtmlCode)
+  let currentHtmlCode = htmlCodeEditor.session.getValue();
+  htmlCodeEditor.session.setValue(currentHtmlCode);
 
   document
     .getElementById("htmlToggle")
     .classList.toggle("html-toggle--toggled");
-  
+
   document
     .getElementById("bottomPanelRow")
     .classList.toggle("child__panel--hidden");

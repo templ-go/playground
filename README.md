@@ -36,3 +36,8 @@ Runs a simple web server for local playground development
 ```sh
 serve -dir ./public
 ```
+### hot-serve
+Runs a simple web server for local playground development with hot reload and sse events to refresh client
+```sh
+go run server/main.go
+```
